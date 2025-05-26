@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <title>Menú Semanal de Almuerzos 2025</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #fdf6e3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .postit {
+      background-color: #fff475;
+      width: 80%;
+      max-width: 600px;
+      padding: 20px;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid #e0c700;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 0;
+      font-size: 2rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      margin: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 10px;
+      background-color: #fff;
+      border-left: 5px solid #ffa500;
+      border-radius: 5px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      font-size: 1.5rem;
+    }
+
+    .hoy {
+      background-color: #b2fab4;
+      border-left-color: #4caf50;
+      font-weight: bold;
+    }
+
+    .botones {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 600px;
+      padding: 0 10px;
+    }
+
+    button {
+      background-color: #ffcc00;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+      font-size: 1.5rem;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    button:hover {
+      background-color: #ffdd33;
+    }
+
+    @media (max-width: 780px) {
+      .postit {
+        padding: 15px;
+        margin: 15px 5px;
+        border-radius: 8px;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      li {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 1.5rem;
+        min-width: 100%;
+      }
+
+      .botones {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="postit">
+    <h2 id="titulo"></h2>
+    <ul id="menu"></ul>
+  </div>
+
+  <div class="botones">
+    <button onclick="cambiarSemana(-1)">⏮ Semana anterior</button>
+    <button onclick="cambiarSemana(1)">Semana siguiente ⏭</button>
+  </div>
+
+  <script>
+    const menus = [
+      ["Lentejas", "Pollo + Papas fritas", "Salpicón", "Fajitas + Lechuga y tomate", "Carne mongoliana + Arroz", "Pescado + Puré", "Cazuela"],
+      ["Pollo + Papas doradas", "Tortilla de verduras + Arroz", "Charquicán (incluye papas y verduras)", "Carne + Puré", "Fideos con salsa", "Carbonada", "Pescado + Cuscús"],
+      ["Fajitas + Choclo y pepino", "Lentejas", "Carne mongoliana + arroz", "Pastel de papas", "Cazuela", "Salpicón + Tomate y lechuga", "Pizza + ensalada"],
+      ["Charquicán (incluye papas y verduras)", "Tortilla de verduras + Puré", "Pescado + Cuscús", "Carbonada", "Lasagna", "Carne + Ensalada de lechuga y tomate", "Lentejas"]
+    ];
+
+    const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+    // Obtener el día actual (0 = lunes, 6 = domingo)
+    const hoy = new Date();
+    const diaActual = (hoy.getDay() + 6) % 7; // Ajuste: convierte 0=domingo en 6 y recorre al inicio
+
+    const semanaDelAno = Math.floor((Date.now() - new Date(hoy.getFullYear(), 0, 1)) / (7 * 24 * 60 * 60 * 1000));
+    let semanaIndex = (semanaDelAno - 2) % 4;
+
+
+    const titulo = document.getElementById("titulo");
+    const lista = document.getElementById("menu");
+
+    function renderizarMenu() {
+      lista.innerHTML = "";
+      titulo.textContent = `Menú semanal - Semana ${semanaIndex + 1}`;
+
+      menus[semanaIndex].forEach((comida, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${dias[index]}: ${comida}`;
+        if (index === diaActual) li.classList.add("hoy");
+        lista.appendChild(li);
+      });
+    }
+
+    function cambiarSemana(direccion) {
+      semanaIndex = (semanaIndex + direccion + menus.length) % menus.length;
+      renderizarMenu();
+    }
+
+    renderizarMenu();
+  </script>
+
+</body>
+
+</html>
