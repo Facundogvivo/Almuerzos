@@ -145,8 +145,19 @@
     const hoy = new Date();
     const diaActual = (hoy.getDay() + 6) % 7; // Ajuste: convierte 0=domingo en 6 y recorre al inicio
 
-    const semanaDelAno = Math.floor((Date.now() - new Date(hoy.getFullYear(), 0, 1)) / (7 * 24 * 60 * 60 * 1000));
-    let semanaIndex = (semanaDelAno - 2) % 4;
+    // Calcular el lunes de esta semana (lunes como día 0)
+    const lunesActual = new Date(hoy);
+    lunesActual.setDate(hoy.getDate() - ((hoy.getDay() + 6) % 7)); // Ajusta para que lunes sea 0
+
+    // Fecha base: lunes 6 de mayo 2025 (inicio del ciclo de 4 semanas)
+    const inicioCiclo = new Date(2025, 4, 6); // 2025-05-06 es martes, así que usamos el día anterior: lunes 5
+
+    // Calcular semanas completas desde el inicio del ciclo
+    const semanasDesdeInicio = Math.floor((lunesActual - inicioCiclo) / (7 * 24 * 60 * 60 * 1000));
+
+    // Calcular semanaIndex cíclico de 0 a 3
+    let semanaIndex = ((semanasDesdeInicio % 4) + 1) % 4;
+
 
 
     const titulo = document.getElementById("titulo");
